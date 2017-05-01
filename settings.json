@@ -16,6 +16,6 @@
     "lk": {
         "type": 3,
         "room": "kitchen",
-        "max_time": 3
+        "max_time": 5
     }
 }

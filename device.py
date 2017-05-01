@@ -1,14 +1,15 @@
+import time
 from enum import IntEnum, unique
 
+
 class Time:
-    "Fake time for debugging purposes only"
+    "Maintain the current time in seconds"
     now = 0
 
     def tick(self):
-        "Pass time one unit"
-        self.now = self.now + 1
+        self.now = time.time()
 
-time = Time()
+mytime = Time()
 
 @unique
 class Types(IntEnum):
@@ -56,7 +57,7 @@ class Device:
         return ''.join(result)
 
     def set_on(self, is_on):
-        global time
+        global mytime
         self.is_on = is_on
         if self.type == Types.MOTION_SENSOR:
             # If motion sensor noticed motion, switch all connected devices on
@@ -70,7 +71,7 @@ class Device:
         # Make sure the device switches off after max_time
         if is_on and self.max_time:
             # Set automatic off time
-            self.off_time = time.now + self.max_time
+            self.off_time = mytime.now + self.max_time
         # Switching off? No need for automatic off_time
         if not is_on:
             self.off_time = 0
@@ -80,8 +81,8 @@ class Device:
         self.set_on(not self.is_on)
 
     def tick(self):
-        global time
-        if self.off_time and time.now >= self.off_time:
+        global mytime
+        if self.off_time and mytime.now >= self.off_time:
             self.off_time = 0
             self.set_on(False)
 
@@ -120,13 +121,13 @@ class Devices:
 
     def tick(self):
         """Call this every second or after each input"""
-        global time
-        time.tick()
+        global mytime
+        mytime.tick()
 
         for id, d in self.list.items():
             assert isinstance(d, Device)
             d.tick()
 
     def now(self):
-        global time
-        return time.now
+        global mytime
+        return mytime.now

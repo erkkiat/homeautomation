@@ -55,21 +55,15 @@ def list_devices():
 
 def interrupted(signum, frame):
     "called when read times out"
-    global now
-    print ('interrupted %d' % (now,))
-    now = now + 1
-    signal.alarm(TIMEOUT)
+    device_list.tick()
+    signal.alarm(5)
 
-# signal.signal(signal.SIGALRM, interrupted)
+signal.signal(signal.SIGALRM, interrupted)
 
 def my_input():
-    try:
-        foo = input('Time=%d> ' % (device_list.now(),))
-        device_list.tick()
-        return foo
-    except:
-        raise
-        exit(0)
+    foo = input('Time=%d> ' % (device_list.now(),))
+    device_list.tick()
+    return foo
 
 
 device_list = Devices()
@@ -103,8 +97,8 @@ print("Dawn is at %s and dusk at %s today." % (sun.datetime('dawn').strftime('%H
                                                sun.datetime('dusk').strftime('%H:%M')))
 
 for i in range(0,15):
-    # set alarm
-    # signal.alarm(TIMEOUT)
+    # set interrupt for switching lamps on and off when needed
+    signal.alarm(5)
     s = my_input()
     if s == 'list':
         list_devices()
