@@ -18,8 +18,7 @@ All the rest will be automatic.
 # INSTALLATION
 
 >```
->pip install astral
->pip install babel
+>python3 setup.py install
 >```
 
 To start homeautomation:
