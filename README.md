@@ -18,3 +18,8 @@ All the rest will be automatic.
 TODO:
 * Switch on external lights when the sun sets and switch them off when the sun rises
 * Add door sensors
+* Add home security logic
+* Add temperature monitoring logic
+* Add water leak monitoring logic
+* Create a mobile client or integrate to openremote etc.
+* Create a web client for configuring the system
