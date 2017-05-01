@@ -1,3 +1,5 @@
+from enum import IntEnum, unique
+
 class Time:
     "Fake time for debugging purposes only"
     now = 0
@@ -7,6 +9,16 @@ class Time:
         self.now = self.now + 1
 
 time = Time()
+
+@unique
+class Types(IntEnum):
+    DOOR_SENSOR = 1
+    MOTION_SENSOR = 2
+    LIGHT = 3
+    SWITCH = 4
+    TEMPERATURE_SENSOR = 5
+    HUMIDITY_SENSOR = 6
+    LIGHT_SENSOR = 7
 
 
 class Device:
@@ -20,15 +32,6 @@ class Device:
     max_time = None
     # The time of automatic off, to be set runtime
     off_time = 0
-
-    class Types:
-        DOOR_SENSOR = 1
-        MOTION_SENSOR = 2
-        LIGHT = 3
-        SWITCH = 4
-        TEMPERATURE_SENSOR = 5
-        HUMIDITY_SENSOR = 6
-        LIGHT_SENSOR = 7
 
     type_names = ['', 'Door sensor', 'Motion sensor', 'Lamp', 'Switch',
                          'Temperature sensor', 'Humidity sensor', 'Light sensor']
@@ -55,7 +58,7 @@ class Device:
     def set_on(self, is_on):
         global time
         self.is_on = is_on
-        if self.type == self.Types.MOTION_SENSOR:
+        if self.type == Types.MOTION_SENSOR:
             # If motion sensor noticed motion, switch all connected devices on
             if self.is_on:
                 for d in self.control:

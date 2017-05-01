@@ -1,26 +1,10 @@
-import signal
 import json
+import signal
+
+import device
+import settings
 from device import Device, Devices
-
-TIMEOUT = 3 # number of seconds your want for timeout
-SETTINGS_FILE = 'settings.json'
-
-rooms = [
-    {'name': 'living'},
-    {'name': 'kitchen'},
-    {'name': 'toilet'},
-    {'name': 'bathroom'},
-    {'name': 'bedroom'},
-]
-
-class device_types:
-    DOOR_SENSOR=1
-    MOTION_SENSOR=2
-    LIGHT=3
-    SWITCH=4
-    TEMPERATURE_SENSOR=5
-    HUMIDITY_SENSOR=6
-    LIGHT_SENSOR=7
+from sun import Sun
 
 device_type_names = ['', 'Door sensor', 'Motion sensor', 'Lamp', 'Switch',
                      'Temperature sensor', 'Humidity sensor', 'Light sensor']
@@ -92,11 +76,11 @@ device_list = Devices()
 
 # Read settings from file
 try:
-    with open(SETTINGS_FILE, 'r') as file:
+    with open(settings.DEVICES_FILE, 'r') as file:
         a = ''.join(file.readlines())
         # print(a)
         devices = json.loads(a)
-        print('Settings read from "%s"' % (SETTINGS_FILE,))
+        print('Settings read from "%s"' % (settings.DEVICES_FILE,))
         # Create the device objects based on settings file
         for id, device in devices.items():
             assert isinstance(id, str)
@@ -105,14 +89,18 @@ try:
             device_list.append(d)
         device_list.post_load()
 except FileNotFoundError:
-    print('Error reading file "%s". Creating it.' % (SETTINGS_FILE,))
+    print('Error reading file "%s". Creating it.' % (settings.DEVICES_FILE,))
     devices = {
-        'mk': {'type': device_types.MOTION_SENSOR, 'room': 'kitchen', 'control': ['lk']},
-        'sk': {'type': device_types.SWITCH, 'room': 'kitchen', 'control': ['lk']},
-        'lk': {'type': device_types.LIGHT, 'room': 'kitchen'},
+        'mk': {'type': device.Types.MOTION_SENSOR, 'room': 'kitchen', 'control': ['lk']},
+        'sk': {'type': device.Types.SWITCH, 'room': 'kitchen', 'control': ['lk']},
+        'lk': {'type': device.Types.LIGHT, 'room': 'kitchen'},
     }
-    with open(SETTINGS_FILE, 'w') as file:
+    with open(settings.DEVICES_FILE, 'w') as file:
             print(json.dumps(devices, indent=4), file=file)
+
+sun = Sun()
+print("Dawn is at %s and dusk at %s today." % (sun.datetime('dawn').strftime('%H:%M'),
+                                               sun.datetime('dusk').strftime('%H:%M')))
 
 for i in range(0,15):
     # set alarm

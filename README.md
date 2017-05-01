@@ -1,5 +1,5 @@
 # homeautomation
-A home automation system for normal people.
+A home automation system for regular people.
 
 There is a large number of home automation hubs and systems available today. However, they require an engineering degree to configure and ultimately maintaining them causes an ulcer.
 
@@ -15,7 +15,21 @@ The configuration involves:
 
 All the rest will be automatic.
 
-TODO:
+#INSTALLATION
+
+>```
+>pip install astral
+>pip install babel
+>```
+
+To start homeautomation:
+
+>`python3 homeautomation.py`
+
+On the command line, you can "list" the devices and you can toggle 
+a device by typing it's ID, such as "sk" or "mk" and pressing enter.
+
+#TODO
 * Switch on external lights when the sun sets and switch them off when the sun rises
 * Add door sensors
 * Add home security logic
