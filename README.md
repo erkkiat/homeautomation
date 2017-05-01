@@ -16,6 +16,7 @@ The configuration involves:
 All the rest will be automatic.
 
 TODO:
+* Drivers for various standards, including z-wave, ZigBee and Insteon
 * Switch on external lights when the sun sets and switch them off when the sun rises
 * Add door sensors
 * Add home security logic
