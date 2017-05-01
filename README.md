@@ -30,6 +30,8 @@ On the command line, you can "list" the devices and you can toggle
 a device by typing it's ID, such as "sk" or "mk" and pressing enter.
 
 #TODO
+TODO:
+* Drivers for various standards, including z-wave, ZigBee and Insteon
 * Switch on external lights when the sun sets and switch them off when the sun rises
 * Add door sensors
 * Add home security logic
