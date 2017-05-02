@@ -3,11 +3,9 @@ import signal
 
 import device
 import settings
-from device import Device, Devices
+from device import Device, Devices, device_type_names
 from sun import Sun
 
-device_type_names = ['', 'Door sensor', 'Motion sensor', 'Lamp', 'Switch',
-                     'Temperature sensor', 'Humidity sensor', 'Light sensor']
 
 def control(id):
     d = devices[id]
@@ -53,12 +51,10 @@ def list_devices():
         print('%5s %s in %s' % (id, device_type_names[d.type], d.room))
 
 
-def interrupted(signum, frame):
-    "called when read times out"
+def awaken(signum, frame):
     device_list.tick()
-    signal.alarm(5)
 
-signal.signal(signal.SIGALRM, interrupted)
+signal.signal(signal.SIGALRM, awaken)
 
 def my_input():
     foo = input('Time=%d> ' % (device_list.now(),))
@@ -97,8 +93,6 @@ print("Dawn is at %s and dusk at %s today." % (sun.datetime('dawn').strftime('%H
                                                sun.datetime('dusk').strftime('%H:%M')))
 
 for i in range(0,15):
-    # set interrupt for switching lamps on and off when needed
-    signal.alarm(5)
     s = my_input()
     if s == 'list':
         list_devices()

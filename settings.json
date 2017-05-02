@@ -17,5 +17,17 @@
         "type": 3,
         "room": "kitchen",
         "max_time": 5
+    },
+    "sb": {
+        "type": 4,
+        "room": "bedroom",
+        "control": [
+            "lb"
+        ]
+    },
+    "lb": {
+        "type": 3,
+        "room": "bedroom",
+        "max_time": 8
     }
 }

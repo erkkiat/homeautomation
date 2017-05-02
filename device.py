@@ -1,3 +1,4 @@
+import signal
 import time
 from enum import IntEnum, unique
 
@@ -21,6 +22,8 @@ class Types(IntEnum):
     HUMIDITY_SENSOR = 6
     LIGHT_SENSOR = 7
 
+device_type_names = ['', 'Door sensor', 'Motion sensor', 'Lamp', 'Switch',
+                     'Temperature sensor', 'Humidity sensor', 'Light sensor']
 
 class Device:
     id = None
@@ -100,6 +103,7 @@ class Devices:
             device = self.find(device)
         assert isinstance(device, Device)
         device.toggle()
+        self.tick()
 
     def items(self):
         return self.list.items()
@@ -119,15 +123,34 @@ class Devices:
                 # TODO: This is a copy, right? How to reference the instance?
                 d.control.append(controlled)
 
+    def set_next_alarm(self):
+        "Figure out which device should be switched off next and when"
+        seconds_list = []
+        now = mytime.now
+        for id, d in self.list.items():
+            assert isinstance(d, Device)
+            if d.off_time:
+                seconds_until_off_time = int(d.off_time-now)
+                seconds_list.append(seconds_until_off_time)
+                # print('Device %s off in %d seconds.' % (d.id, seconds_until_off_time))
+        if len(seconds_list):
+            # Which seconds_until_off_time is the smallest, hence the next one?
+            next_alarm_in_seconds = sorted(seconds_list)[0]
+            # print('Next alarm in %d seconds.' % (next_alarm_in_seconds,))
+            # Let's wake up again when the next device is to be switched off
+            signal.alarm(next_alarm_in_seconds+1)
+
     def tick(self):
         """Call this every second or after each input"""
         global mytime
         mytime.tick()
-
-        for id, d in self.list.items():
-            assert isinstance(d, Device)
-            d.tick()
+        self.set_next_alarm()
+        for id, device in self.list.items():
+            assert isinstance(device, Device)
+            # Let each device check if it needs to switch off
+            device.tick()
 
     def now(self):
         global mytime
         return mytime.now
+
